@@ -1,0 +1,29 @@
+name: SonarQube Scan
+
+on:
+  workflow_call:
+
+jobs:  
+  sonarqube:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+#           ref: ${{ github.event.inputs.branch || 'main' }}
+#           repository: ${{ github.event.inputs.repository }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name : Install Dependencies
+        run: yarn install
+
+      - name: Run SonarQube scanner
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
+#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
